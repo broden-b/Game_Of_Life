@@ -107,6 +107,7 @@ public:
 };
 
 int main() {
+    srand(time(0));
     int width, height, alive_cells, steps;
    
     cout << "Enter the width of the grid: ";
