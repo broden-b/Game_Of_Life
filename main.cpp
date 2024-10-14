@@ -1,5 +1,6 @@
 #include <iostream>
 #include <windows.h>
+#include <set>
 
 using namespace std;
 
@@ -14,7 +15,7 @@ public:
     }
 
     char getDisplay() const {
-        return isAlive ? 'O' : '.';
+        return isAlive ? 'O' : ' ';
     }
 };
 
@@ -32,7 +33,6 @@ public:
         for (int i = 0; i < height; i++) {
             grid[i] = new Cell[width]; 
         }
-       
     }
 
     ~Board() {
@@ -67,7 +67,7 @@ public:
         }
         return count;
     }
-
+   
     void updateBoard() {
         
         Cell** newGrid = new Cell * [height];
@@ -97,8 +97,9 @@ public:
 
     void display() const {
         for (int y = 0; y < height; y++) {
+            cout << ".";
             for (int x = 0; x < width; x++) {
-                cout << grid[y][x].getDisplay();
+                cout << grid[y][x].getDisplay() << ".";
             }
             cout << endl;
         }
@@ -106,28 +107,32 @@ public:
 };
 
 int main() {
-    int width, height, aliveCells, steps;
+    int width, height, alive_cells, steps;
    
     cout << "Enter the width of the grid: ";
     cin >> width;
     cout << "Enter the height of the grid: ";
     cin >> height;
     cout << "Enter size of initial population: ";
-    cin >> aliveCells;
+    cin >> alive_cells;
     cout << "Enter number of steps the simulation will take: ";
     cin >> steps;
     
     Board board(width, height);
+
+    set<pair<int, int>> chosen_cells;
     
-    for (int i = 0; i < aliveCells; i++) {
+    while (chosen_cells.size() < alive_cells) {
         int x = rand() % (width);
         int y = rand() % (height);
-        board.setAlive(x, y, true);
+        if (chosen_cells.insert({ x, y }).second) {
+            board.setAlive(x, y, true);
+        }
     }
 
     for (int i = 0; i < steps; i++) {
         //system("cls");  
-        board.display();  
+        board.display();
         board.updateBoard();  
         cout << "Step: " << i+1 << "\n\n";
         Sleep(500);  
