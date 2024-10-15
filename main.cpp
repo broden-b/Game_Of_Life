@@ -1,6 +1,9 @@
 #include <iostream>
 #include <windows.h>
 #include <set>
+#include <fstream>
+#include <string>
+#include <sstream>
 
 using namespace std;
 
@@ -21,25 +24,41 @@ public:
 
 class Board {
 private:
-    Cell** grid;  
+    Cell** grid;
     int width;
     int height;
 
-public:
-    
-    Board(int w, int h) : width(w), height(h) {
-        
-        grid = new Cell * [height];  
+    void initializeGrid() {
+        grid = new Cell * [height];
         for (int i = 0; i < height; i++) {
-            grid[i] = new Cell[width]; 
+            grid[i] = new Cell[width];
         }
     }
 
-    ~Board() {
-        for (int i = 0; i < height; i++) {
-            delete[] grid[i];  
+    void deleteGrid() {
+        if (grid != nullptr) {
+            for (int i = 0; i < height; i++) {
+                delete[] grid[i];
+            }
+            delete[] grid;
+            grid = nullptr;
         }
-        delete[] grid;  
+    }
+
+public:
+    Board(int w, int h) : width(w), height(h), grid(nullptr) {
+        initializeGrid();
+    }
+
+    ~Board() {
+        deleteGrid();
+    }
+
+    int getWidth() const {
+        return width; 
+    }
+    int getHeight() const {
+        return height;
     }
    
     bool isAlive(int x, int y) const {
@@ -49,6 +68,7 @@ public:
     void setAlive(int x, int y, bool alive) {
         grid[y][x].setState(alive);
     }
+
 
     int countLivingNeighbors(int x, int y) const {
         int count = 0;
@@ -104,40 +124,118 @@ public:
             cout << endl;
         }
     }
+
+    void saveBoard() {
+        ofstream outFile("saved_board.csv");
+        outFile << width << "," << height << endl;
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
+                if (grid[y][x].isAlive) {
+                    outFile << x << "," << y << endl;
+                }
+            }
+        }
+        outFile.close();
+        cout << "Save successful";
+    }
+
+    void loadBoard() {
+        ifstream inFile("saved_board.csv");
+
+        string line;
+        getline(inFile, line);
+        stringstream ss(line);
+        string widthStr, heightStr;
+        getline(ss, widthStr, ',');
+        getline(ss, heightStr);
+        
+        int newWidth = stoi(widthStr);
+        int newHeight = stoi(heightStr);
+
+        if (newWidth != width || newHeight != height) {
+            deleteGrid();
+            width = newWidth;
+            height = newHeight;
+            initializeGrid();
+        }
+        else {
+            // Clear the existing grid
+            for (int y = 0; y < height; y++) {
+                for (int x = 0; x < width; x++) {
+                    grid[y][x].setState(false);
+                }
+            }
+        }
+
+        while (getline(inFile, line)) {
+            stringstream ss(line);
+            string xStr, yStr;
+            getline(ss, xStr, ',');
+            getline(ss, yStr);
+            int x = stoi(xStr);
+            int y = stoi(yStr);
+            setAlive(x, y, true);
+        }
+
+        inFile.close();
+        cout << "Load successful" << endl;
+    }
 };
 
 int main() {
     srand(time(0));
     int width, height, alive_cells, steps;
-   
-    cout << "Enter the width of the grid: ";
-    cin >> width;
-    cout << "Enter the height of the grid: ";
-    cin >> height;
-    cout << "Enter size of initial population: ";
-    cin >> alive_cells;
-    cout << "Enter number of steps the simulation will take: ";
-    cin >> steps;
-    
-    Board board(width, height);
+    char save_choice;
+    int load_choice;
 
-    set<pair<int, int>> chosen_cells;
-    
-    while (chosen_cells.size() < alive_cells) {
-        int x = rand() % (width);
-        int y = rand() % (height);
-        if (chosen_cells.insert({ x, y }).second) {
-            board.setAlive(x, y, true);
+    cout << "Load grid (0) or New grid (1)?\n";
+    cin >> load_choice;
+
+    Board* board;
+
+    if (load_choice == 0) {
+        board = new Board(1, 1);
+        board->loadBoard();
+        cout << "Enter number of additional steps the simulation will take: ";
+        cin >> steps;
+    }
+    else {
+        cout << "Enter the width of the grid: ";
+        cin >> width;
+        cout << "Enter the height of the grid: ";
+        cin >> height;
+        cout << "Enter size of initial population: ";
+        cin >> alive_cells;
+        cout << "Enter number of steps the simulation will take: ";
+        cin >> steps;
+
+        board = new Board(width, height);
+
+        set<pair<int, int>> chosen_cells;
+        while (chosen_cells.size() < alive_cells) {
+            int x = rand() % (board->getWidth());
+            int y = rand() % (board->getHeight());
+            if (chosen_cells.insert({ x, y }).second) {
+                board->setAlive(x, y, true);
+            }
         }
     }
 
     for (int i = 0; i < steps; i++) {
         //system("cls");  
-        board.display();
-        board.updateBoard();  
-        cout << "Step: " << i+1 << "\n\n";
-        Sleep(500);  
+        board->display();
+        board->updateBoard();
+        cout << "Step: " << i + 1 << "\n\n";
+        Sleep(500);
     }
 
+    cout << "Save Board? (y/n)\n";
+    cin >> save_choice;
+
+    if (save_choice == 'y' || save_choice == 'Y') {
+        board->saveBoard();
+    }
+
+    delete board;
     return 0;
 }
