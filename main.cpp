@@ -178,64 +178,94 @@ public:
         }
 
         inFile.close();
-        cout << "Load successful" << endl;
+        cout << "Load successful\n" << endl;
+        display();
     }
 };
 
-int main() {
-    srand(time(0));
+void displayMenu() {
+    system("cls");
+    cout << "Game of Life\n\n1. Create New Simulation\n2. Load Saved Simulation\n3. Exit\n" << endl;
+}
+
+Board* createNewSimulation() {
     int width, height, alive_cells, steps;
-    char save_choice;
-    int load_choice;
 
-    cout << "Load grid (0) or New grid (1)?\n";
-    cin >> load_choice;
+    cout << "Enter the width of the grid: ";
+    cin >> width;
+    cout << "Enter the height of the grid: ";
+    cin >> height;
+    cout << "Enter size of initial population: ";
+    cin >> alive_cells;
 
-    Board* board;
+    Board* board = new Board(width, height);
 
-    if (load_choice == 0) {
-        board = new Board(1, 1);
-        board->loadBoard();
-        cout << "Enter number of additional steps the simulation will take: ";
-        cin >> steps;
-    }
-    else {
-        cout << "Enter the width of the grid: ";
-        cin >> width;
-        cout << "Enter the height of the grid: ";
-        cin >> height;
-        cout << "Enter size of initial population: ";
-        cin >> alive_cells;
-        cout << "Enter number of steps the simulation will take: ";
-        cin >> steps;
-
-        board = new Board(width, height);
-
-        set<pair<int, int>> chosen_cells;
-        while (chosen_cells.size() < alive_cells) {
-            int x = rand() % (board->getWidth());
-            int y = rand() % (board->getHeight());
-            if (chosen_cells.insert({ x, y }).second) {
-                board->setAlive(x, y, true);
-            }
+    set<pair<int, int>> chosen_cells;
+    while (chosen_cells.size() < alive_cells) {
+        int x = rand() % (board->getWidth());
+        int y = rand() % (board->getHeight());
+        if (chosen_cells.insert({ x, y }).second) {
+            board->setAlive(x, y, true);
         }
     }
 
+    return board;
+}
+
+Board* loadSavedSimulation() {
+    Board* board = new Board(1, 1);  // Temporary dimensions, will be updated in loadBoard
+    board->loadBoard();
+    return board;
+}
+
+void runSimulation(Board* board) {
+    int steps;
+    cout << "Enter number of steps the simulation will take: ";
+    cin >> steps;
+
     for (int i = 0; i < steps; i++) {
-        //system("cls");  
+        //system("cls");
         board->display();
         board->updateBoard();
-        cout << "Step: " << i + 1 << "\n\n";
+        cout << "Step: " << i + 1 << " / " << steps << "\n\n";
         Sleep(500);
     }
 
-    cout << "Save Board? (y/n)\n";
+    char save_choice;
+    cout << "Save Board? (y/n): ";
     cin >> save_choice;
 
     if (save_choice == 'y' || save_choice == 'Y') {
         board->saveBoard();
     }
+}
 
-    delete board;
+int main() {
+    srand(time(0));
+
+    while (true) {
+        displayMenu();
+        int choice;
+        cin >> choice;
+
+        Board* board = nullptr;
+
+        switch (choice) {
+        case 1:
+            board = createNewSimulation();
+            runSimulation(board);
+            delete board;
+            break;
+        case 2:
+            board = loadSavedSimulation();
+            runSimulation(board);
+            delete board;
+            break;
+        case 3:
+            cout << "Thank you for using the Game of Life Simulator. Goodbye!" << endl;
+            return 0;
+        }
+    }
+
     return 0;
 }
