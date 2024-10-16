@@ -14,7 +14,7 @@ public:
     bool isAlive() const;
 
 private:
-    bool m_isAlive;
+    bool is_alive;
 };
 
 class Board {

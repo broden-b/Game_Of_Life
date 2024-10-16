@@ -5,18 +5,18 @@
 
 using namespace std;
 
-Cell::Cell() : m_isAlive(false) {}
+Cell::Cell() : is_alive(false) {}
 
 void Cell::setState(bool alive) {
-    m_isAlive = alive;
+    is_alive = alive;
 }
 
 char Cell::getDisplay() const {
-    return m_isAlive ? 'O' : ' ';
+    return is_alive ? 'O' : ' ';
 }
 
 bool Cell::isAlive() const {
-    return m_isAlive;
+    return is_alive;
 }
 
 void Board::initializeGrid() {

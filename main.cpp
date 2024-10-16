@@ -1,14 +1,14 @@
 #include <iostream>
 #include <windows.h>
 #include <set>
-#include <ctime>
 #include "game_of_life.h"
+#include "block_pattern.h"
 
 using namespace std;
 
 void displayMenu() {
     system("cls");
-    cout << "Game of Life\n\n1. Create New Simulation\n2. Load Saved Simulation\n3. Exit\n" << endl;
+    cout << "Game of Life\n\n1. Create New Simulation\n2. Load Saved Simulation\n3. Experiment To Find Block Pattern\n4. Exit\n" << endl;
 }
 
 Board* createNewSimulation() {
@@ -63,6 +63,21 @@ void runSimulation(Board* board) {
     }
 }
 
+void runBlockFinderSimulation() {
+    int width, height, alive_cells, maxSteps;
+
+    cout << "Enter grid width: ";
+    cin >> width;
+    cout << "Enter grid height: ";
+    cin >> height;
+    cout << "Enter initial population: ";
+    cin >> alive_cells;
+    cout << "Enter maximum steps per simulation: ";
+    cin >> maxSteps;
+
+    runSimulationsUntilBlockFound(width, height, alive_cells, maxSteps);
+}
+
 int main() {
     srand(time(0));
 
@@ -85,6 +100,8 @@ int main() {
             delete board;
             break;
         case 3:
+            runBlockFinderSimulation();
+        case 4:
             return 0;
         }
     }
