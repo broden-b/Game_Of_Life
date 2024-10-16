@@ -54,11 +54,11 @@ void runSimulation(Board* board) {
         Sleep(500);
     }
 
-    char save_choice;
-    cout << "Save Board? (y/n): ";
+    int save_choice;
+    cout << "Save Board?:\n1. Yes\n2. No\n" << endl;
     cin >> save_choice;
 
-    if (save_choice == 'y' || save_choice == 'Y') {
+    if (save_choice == 1) {
         board->saveBoard();
     }
 }

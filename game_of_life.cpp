@@ -5,7 +5,6 @@
 
 using namespace std;
 
-// Cell implementations
 Cell::Cell() : m_isAlive(false) {}
 
 void Cell::setState(bool alive) {
@@ -20,7 +19,6 @@ bool Cell::isAlive() const {
     return m_isAlive;
 }
 
-// Board implementations
 void Board::initializeGrid() {
     grid = new Cell * [height];
     for (int i = 0; i < height; i++) {
