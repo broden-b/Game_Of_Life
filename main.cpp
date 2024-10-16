@@ -85,7 +85,6 @@ int main() {
             delete board;
             break;
         case 3:
-            cout << "Thank you for using the Game of Life Simulator. Goodbye!" << endl;
             return 0;
         }
     }
