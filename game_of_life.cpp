@@ -5,19 +5,27 @@
 
 using namespace std;
 
+// Cell class implementation
+
 Cell::Cell() : is_alive(false) {}
+// Constructor initializes cell as dead
 
 void Cell::setState(bool alive) {
     is_alive = alive;
 }
+// Set the state of the cell
 
 char Cell::getDisplay() const {
     return is_alive ? 'O' : ' ';
 }
+// Return 'O' for live cell, space for dead cell
 
 bool Cell::isAlive() const {
     return is_alive;
 }
+// Return the current state of the cell
+
+// Board class implementation
 
 void Board::initializeGrid() {
     grid = new Cell * [height];
@@ -25,6 +33,7 @@ void Board::initializeGrid() {
         grid[i] = new Cell[width];
     }
 }
+// Dynamically allocate 2D array of Cells
 
 void Board::deleteGrid() {
     if (grid != nullptr) {
@@ -35,14 +44,17 @@ void Board::deleteGrid() {
         grid = nullptr;
     }
 }
+// Properly delete the dynamically allocated grid
 
 Board::Board(int w, int h) : width(w), height(h), grid(nullptr) {
     initializeGrid();
 }
+// Constructor initializes dimensions and creates the grid
 
 Board::~Board() {
     deleteGrid();
 }
+// Destructor ensures proper cleanup of dynamically allocated memory
 
 int Board::getWidth() const {
     return width;
@@ -51,14 +63,17 @@ int Board::getWidth() const {
 int Board::getHeight() const {
     return height;
 }
+// Getter methods for board dimensions
 
 bool Board::isAlive(int x, int y) const {
     return grid[y][x].isAlive();
 }
+// Check if cell at given coordinates is alive
 
 void Board::setAlive(int x, int y, bool alive) {
     grid[y][x].setState(alive);
 }
+// Set state of cell at given coordinates
 
 int Board::countLivingNeighbors(int x, int y) const {
     int count = 0;
@@ -77,6 +92,7 @@ int Board::countLivingNeighbors(int x, int y) const {
     }
     return count;
 }
+// Count living neighbors of a cell, handling edge cases
 
 void Board::updateBoard() {
     Cell** newGrid = new Cell * [height];
@@ -99,6 +115,7 @@ void Board::updateBoard() {
     deleteGrid();
     grid = newGrid;
 }
+// Update board state based on Game of Life rules
 
 void Board::display() const {
     for (int y = 0; y < height; y++) {
@@ -109,6 +126,7 @@ void Board::display() const {
         cout << endl;
     }
 }
+// Display current board state
 
 void Board::saveBoard() {
     ofstream outFile("saved_board.csv");
@@ -123,6 +141,7 @@ void Board::saveBoard() {
     outFile.close();
     cout << "Save successful";
 }
+// Save current board state to a CSV file
 
 void Board::loadBoard() {
     ifstream inFile("saved_board.csv");
@@ -165,3 +184,4 @@ void Board::loadBoard() {
     cout << "Load successful\n" << endl;
     display();
 }
+// Load board state from a CSV file

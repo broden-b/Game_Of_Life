@@ -5,7 +5,7 @@
 
 using namespace std;
 
-bool isIsolated(const Board* board, int x, int y, int width, int height) {
+bool isIsolatedSpaceship(const Board* board, int x, int y, int width, int height) {
     for (int dy = -1; dy <= height; dy++) {
         for (int dx = -1; dx <= width; dx++) {
             if (dx >= 0 && dx < width && dy >= 0 && dy < height) continue;
@@ -18,6 +18,8 @@ bool isIsolated(const Board* board, int x, int y, int width, int height) {
     }
     return true;
 }
+// Function to check if a pattern is isolated (surrounded by dead cells)
+// Returns true if the pattern is isolated, false otherwise
 
 bool detectGlider(const Board* board, int x, int y) {
     if (y + 2 >= board->getHeight() || x + 2 >= board->getWidth()) return false;
@@ -28,8 +30,11 @@ bool detectGlider(const Board* board, int x, int y) {
         (board->isAlive(x, y) && board->isAlive(x + 1, y) && board->isAlive(x + 2, y) && board->isAlive(x + 2, y + 1) && board->isAlive(x + 1, y + 2)) ||
         (board->isAlive(x, y) && board->isAlive(x + 1, y) && board->isAlive(x + 2, y) && board->isAlive(x, y + 1) && board->isAlive(x + 1, y + 2));
 
-    return isGlider && isIsolated(board, x, y, 3, 3);
+    return isGlider && isIsolatedSpaceship(board, x, y, 3, 3);
 }
+// Function to detect a Glider pattern at a given position
+// Checks for all four possible orientations of a Glider
+// Returns true if a Glider is found and it's isolated
 
 bool detectLWSS(const Board* board, int x, int y) {
     if (y + 3 >= board->getHeight() || x + 4 >= board->getWidth()) return false;
@@ -40,8 +45,11 @@ bool detectLWSS(const Board* board, int x, int y) {
         board->isAlive(x, y + 2) && board->isAlive(x + 4, y + 2) &&
         board->isAlive(x, y + 3) && board->isAlive(x + 1, y + 3) && board->isAlive(x + 2, y + 3) && board->isAlive(x + 3, y + 3);
 
-    return isLWSS && isIsolated(board, x, y, 5, 4);
+    return isLWSS && isIsolatedSpaceship(board, x, y, 5, 4);
 }
+// Function to detect a Lightweight Spaceship (LWSS) pattern at a given position
+// Checks for the LWSS pattern
+// Returns true if an LWSS is found and it's isolated
 
 bool detectSpaceshipPattern(const Board* board, int& patternX, int& patternY, bool& isGlider) {
     for (int y = 0; y < board->getHeight(); y++) {
@@ -62,6 +70,8 @@ bool detectSpaceshipPattern(const Board* board, int& patternX, int& patternY, bo
     }
     return false;
 }
+// Function to scan the entire board for Glider or LWSS patterns
+// Returns true if either pattern is found, and updates the provided references with pattern information
 
 void initialiseBoardSpaceship(Board& board, int alive_cells) {
     set<pair<int, int>> chosenCells;
@@ -73,6 +83,8 @@ void initialiseBoardSpaceship(Board& board, int alive_cells) {
         }
     }
 }
+// Function to initialize the board with a random set of alive cells
+// Uses a set to ensure each cell is only set alive once
 
 bool hasPatternMoved(const Board* board, int oldX, int oldY, bool isGlider) {
     int newX, newY;
@@ -88,6 +100,8 @@ bool hasPatternMoved(const Board* board, int oldX, int oldY, bool isGlider) {
             ((newX - oldX == 2 && newY == oldY) || (newX == oldX && abs(newY - oldY) <= 1));
     }
 }
+// Function to check if a spaceship pattern has moved
+// Returns true if the pattern has moved according to its expected behavior (Glider or LWSS)
 
 void runSimulationsSpaceship(int width, int height, int alive_cells, int steps) {
     int simulationCount = 0;
@@ -149,6 +163,10 @@ void runSimulationsSpaceship(int width, int height, int alive_cells, int steps) 
         }
         Sleep(500);
         cout << "No spaceship pattern found in " << steps << " steps." << endl;
-        seed = time(0);
+        seed = time(0);  // Get a new seed for the next simulation
     }
 }
+// Function to run multiple simulations to find spaceship patterns
+// Creates a new board for each simulation, initializes it randomly, and runs the simulation for a specified number of steps
+// If a pattern is found, it confirms the spaceship behavior by checking if it moves correctly
+// If confirmed, it replays the simulation to show how the pattern formed and moved

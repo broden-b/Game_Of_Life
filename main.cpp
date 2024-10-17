@@ -7,12 +7,13 @@
 #include "spaceship_pattern.h"
 
 using namespace std;
+// Using the standard namespace to avoid prefixing std:: everywhere
 
 void displayMenu() {
-    //system("cls");
     cout << "Game of Life\n\n1. Create New Simulation\n2. Load Saved Simulation\n3. Experiment To Find Block or Beehive Pattern\n"
         "4. Experiment To Find Blinker or Toad Pattern\n5. Experiment To Find Glider or LWSS\n6. Exit\n" << endl;
 }
+// Function to display the main menu options
 
 Board* createNewSimulation() {
     int width, height, alive_cells;
@@ -24,7 +25,10 @@ Board* createNewSimulation() {
     cout << "Enter size of initial population: ";
     cin >> alive_cells;
 
+    // Prompt user for grid dimensions and initial population size
+
     Board* board = new Board(width, height);
+    // Create a new Board object dynamically
 
     set<pair<int, int>> chosen_cells;
     while (chosen_cells.size() < alive_cells) {
@@ -34,6 +38,8 @@ Board* createNewSimulation() {
             board->setAlive(x, y, true);
         }
     }
+    // Randomly populate the board with alive cells
+    // Using a set to ensure unique cell positions
 
     return board;
 }
@@ -43,6 +49,7 @@ Board* loadSavedSimulation() {
     board->loadBoard();
     return board;
 }
+// Function to load a saved simulation from a file
 
 void runSimulation(Board* board) {
     int steps;
@@ -50,11 +57,11 @@ void runSimulation(Board* board) {
     cin >> steps;
 
     for (int i = 0; i < steps; i++) {
-        system("cls");
+        system("cls");  // Clear the console (Windows-specific)
         board->display();
         board->updateBoard();
         cout << "Step: " << i + 1 << " / " << steps << "\n\n";
-        Sleep(500);
+        Sleep(500);  // Pause for 500 milliseconds between steps
     }
 
     int save_choice;
@@ -65,9 +72,10 @@ void runSimulation(Board* board) {
         board->saveBoard();
     }
 }
+// Function to run the simulation for a specified number of steps
 
 void runBlockOrBeehiveSimulation() {
-    int width, height, alive_cells, maxSteps;
+    int width, height, alive_cells, steps;
 
     cout << "Enter grid width: ";
     cin >> width;
@@ -76,13 +84,14 @@ void runBlockOrBeehiveSimulation() {
     cout << "Enter initial population: ";
     cin >> alive_cells;
     cout << "Enter maximum steps per simulation: ";
-    cin >> maxSteps;
+    cin >> steps;
 
-    runSimulationsBlockOrBeehive(width, height, alive_cells, maxSteps);
+    runSimulationsStillLife(width, height, alive_cells, steps);
 }
+// Function to run simulations to find Block or Beehive patterns
 
 void runBlinkerOrToadSimulation() {
-    int width, height, alive_cells, maxSteps;
+    int width, height, alive_cells, steps;
 
     cout << "Enter grid width: ";
     cin >> width;
@@ -91,13 +100,14 @@ void runBlinkerOrToadSimulation() {
     cout << "Enter initial population: ";
     cin >> alive_cells;
     cout << "Enter maximum steps per simulation: ";
-    cin >> maxSteps;
+    cin >> steps;
 
-    runSimulationsBlinkerOrToad(width, height, alive_cells, maxSteps);
+    runSimulationsBlinkerOrToad(width, height, alive_cells, steps);
 }
+// Function to run simulations to find Blinker or Toad patterns
 
-void runSpaceshipSimulation(){
-    int width, height, alive_cells, maxSteps;
+void runSpaceshipSimulation() {
+    int width, height, alive_cells, steps;
 
     cout << "Enter grid width: ";
     cin >> width;
@@ -106,13 +116,22 @@ void runSpaceshipSimulation(){
     cout << "Enter initial population: ";
     cin >> alive_cells;
     cout << "Enter maximum steps per simulation: ";
-    cin >> maxSteps;
+    cin >> steps;
 
-    runSimulationsSpaceship(width, height, alive_cells, maxSteps);
+    runSimulationsSpaceship(width, height, alive_cells, steps);
+}
+// Function to run simulations to find Glider or LWSS patterns
+
+void runErnSimulation() {
+    int width, height, alive_cells, steps;
+
+
+
+
 }
 
 int main() {
-    srand(time(0));
+    srand(time(0));  // Seed the random number generator with current time
 
     while (true) {
         displayMenu();
@@ -148,3 +167,4 @@ int main() {
 
     return 0;
 }
+// Main function: Displays menu and handles user choices in a loop until exit is chosen
