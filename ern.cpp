@@ -1,0 +1,2 @@
+//Ask "I need a new file called "ern" that will use the previously defined functions to identify patterns in simulations
+// I need the user to be asked for grid height, width, alive_cells, steps and max simulations, "

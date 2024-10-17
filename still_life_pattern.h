@@ -3,7 +3,7 @@
 
 #include "game_of_life.h"
 
-bool detectPattern(const Board* board);
+bool detectBlockOrBeehive(const Board* board);
 void runSimulationsBlockOrBeehive(int width, int height, int alive_cells, int steps);
 
 #endif

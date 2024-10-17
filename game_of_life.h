@@ -41,4 +41,4 @@ public:
     void loadBoard();
 };
 
-#endif // GAME_OF_LIFE_H
+#endif

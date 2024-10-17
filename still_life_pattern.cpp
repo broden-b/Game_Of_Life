@@ -5,7 +5,7 @@
 
 using namespace std;
 
-bool detectPattern(const Board* board) {
+bool detectBlockOrBeehive(const Board* board) {
     for (int y = 0; y < board->getHeight() - 1; y++) {
         for (int x = 0; x < board->getWidth() - 1; x++) {
             // Check for 2x2 block pattern
@@ -59,7 +59,7 @@ bool detectPattern(const Board* board) {
     return false;
 }
 
-void initialiseBoard(Board& board, int alive_cells) {
+void initialiseBoardStill(Board& board, int alive_cells) {
     set<pair<int, int>> chosenCells;
     while (chosenCells.size() < alive_cells) {
         int x = rand() % board.getWidth();
@@ -80,11 +80,11 @@ void runSimulationsBlockOrBeehive(int width, int height, int alive_cells, int st
 
         Board board(width, height);
         srand(time(0));  // Set the seed for this simulation
-        initialiseBoard(board, alive_cells);
+        initialiseBoardStill(board, alive_cells);
 
         int blockFoundAtStep = -1;
         for (int step = 0; step <= steps; step++) {
-            if (detectPattern(&board)) {
+            if (detectBlockOrBeehive(&board)) {
                 blockFoundAtStep = step;
                 break;
             }
@@ -100,7 +100,7 @@ void runSimulationsBlockOrBeehive(int width, int height, int alive_cells, int st
             // Replay the simulation
             Board replayBoard(width, height);
             srand(time(0));  // Reset the seed to get the same initial state
-            initialiseBoard(replayBoard, alive_cells);
+            initialiseBoardStill(replayBoard, alive_cells);
 
             for (int step = 0; step <= blockFoundAtStep; step++) {
                 //system("cls");

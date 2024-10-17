@@ -21,7 +21,16 @@
     <ClCompile Include="game_of_life.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="block_pattern.cpp">
+    <ClCompile Include="still_life_pattern.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="oscillator_pattern.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="spaceship_pattern.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ern.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -29,7 +38,16 @@
     <ClInclude Include="game_of_life.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="block_pattern.h">
+    <ClInclude Include="still_life_pattern.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="oscillator_pattern.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="spaceship_pattern.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ern.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
