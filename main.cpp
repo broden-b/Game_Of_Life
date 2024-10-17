@@ -122,14 +122,6 @@ void runSpaceshipSimulation() {
 }
 // Function to run simulations to find Glider or LWSS patterns
 
-void runErnSimulation() {
-    int width, height, alive_cells, steps;
-
-
-
-
-}
-
 int main() {
     srand(time(0));  // Seed the random number generator with current time
 
