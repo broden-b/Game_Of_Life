@@ -1,45 +1,62 @@
-#include "block_pattern.h"
+#include "still_life_pattern.h"
 #include <iostream>
 #include <windows.h>
 #include <set>
-#include <vector>
 
 using namespace std;
 
-bool detectBlockPattern(const Board* board) {
+bool detectPattern(const Board* board) {
     for (int y = 0; y < board->getHeight() - 1; y++) {
         for (int x = 0; x < board->getWidth() - 1; x++) {
-            // Check if there's a 2x2 block of living cells
+            // Check for 2x2 block pattern
             if (board->isAlive(x, y) && board->isAlive(x + 1, y) &&
                 board->isAlive(x, y + 1) && board->isAlive(x + 1, y + 1)) {
 
-                // Check surrounding cells (including diagonals)
+                // Check if the 2x2 block is isolated
                 bool isIsolated = true;
                 for (int dy = -1; dy <= 2 && isIsolated; dy++) {
                     for (int dx = -1; dx <= 2 && isIsolated; dx++) {
-                        // Skip the cells of the block itself
                         if ((dx == 0 || dx == 1) && (dy == 0 || dy == 1)) continue;
-
                         int nx = x + dx;
                         int ny = y + dy;
-
-                        // Check if the cell is within the board and alive
                         if (nx >= 0 && nx < board->getWidth() && ny >= 0 && ny < board->getHeight()) {
                             if (board->isAlive(nx, ny)) {
-                                isIsolated = false; // Found a living cell outside the block
+                                isIsolated = false;
                                 break;
                             }
                         }
                     }
                 }
+                if (isIsolated) return true;
+            }
 
-                if (isIsolated) {
-                    return true; // Found an isolated block
+            // Check for beehive pattern
+            if (y < board->getHeight() - 2 && x < board->getWidth() - 3) {
+                if (!board->isAlive(x, y) && board->isAlive(x + 1, y) && board->isAlive(x + 2, y) &&
+                    board->isAlive(x, y + 1) && !board->isAlive(x + 1, y + 1) && board->isAlive(x + 3, y + 1) &&
+                    !board->isAlive(x, y + 2) && board->isAlive(x + 1, y + 2) && board->isAlive(x + 2, y + 2)) {
+
+                    // Check if the beehive is isolated
+                    bool isIsolated = true;
+                    for (int dy = -1; dy <= 3 && isIsolated; dy++) {
+                        for (int dx = -1; dx <= 4 && isIsolated; dx++) {
+                            if ((dx >= 0 && dx <= 3) && (dy >= 0 && dy <= 2)) continue;
+                            int nx = x + dx;
+                            int ny = y + dy;
+                            if (nx >= 0 && nx < board->getWidth() && ny >= 0 && ny < board->getHeight()) {
+                                if (board->isAlive(nx, ny)) {
+                                    isIsolated = false;
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                    if (isIsolated) return true;
                 }
             }
         }
     }
-    return false; // No isolated block found
+    return false;
 }
 
 void initialiseBoard(Board& board, int alive_cells) {
@@ -53,7 +70,7 @@ void initialiseBoard(Board& board, int alive_cells) {
     }
 }
 
-void runSimulationsUntilBlockFound(int width, int height, int alive_cells, int steps) {
+void runSimulationsBlockOrBeehive(int width, int height, int alive_cells, int steps) {
     int simulationCount = 0;
     unsigned int seed = time(0);
 
@@ -67,7 +84,7 @@ void runSimulationsUntilBlockFound(int width, int height, int alive_cells, int s
 
         int blockFoundAtStep = -1;
         for (int step = 0; step <= steps; step++) {
-            if (detectBlockPattern(&board)) {
+            if (detectPattern(&board)) {
                 blockFoundAtStep = step;
                 break;
             }
@@ -75,7 +92,7 @@ void runSimulationsUntilBlockFound(int width, int height, int alive_cells, int s
         }
 
         if (blockFoundAtStep != -1) {
-            cout << "Isolated block pattern found in simulation #" << simulationCount
+            cout << "Pattern found in simulation #" << simulationCount
                 << " at step " << blockFoundAtStep << endl;
             cout << "Replaying the simulation..." << endl;
             Sleep(500);
@@ -86,7 +103,7 @@ void runSimulationsUntilBlockFound(int width, int height, int alive_cells, int s
             initialiseBoard(replayBoard, alive_cells);
 
             for (int step = 0; step <= blockFoundAtStep; step++) {
-                system("cls");
+                //system("cls");
                 cout << "Simulation #" << simulationCount << ", Step " << step << endl;
                 replayBoard.display();
                 Sleep(500);
@@ -98,7 +115,7 @@ void runSimulationsUntilBlockFound(int width, int height, int alive_cells, int s
             return;
         }
         Sleep(500);
-        cout << "No isolated block pattern found in " << steps << " steps." << endl;
+        cout << "No pattern found in " << steps << " steps." << endl;
         seed = time(0);  // Get a new seed for the next simulation
     }
 }

@@ -2,13 +2,13 @@
 #include <windows.h>
 #include <set>
 #include "game_of_life.h"
-#include "block_pattern.h"
+#include "still_life_pattern.h"
 
 using namespace std;
 
 void displayMenu() {
     system("cls");
-    cout << "Game of Life\n\n1. Create New Simulation\n2. Load Saved Simulation\n3. Experiment To Find Block Pattern\n4. Exit\n" << endl;
+    cout << "Game of Life\n\n1. Create New Simulation\n2. Load Saved Simulation\n3. Experiment To Find Block or Beehive Pattern\n4. Exit\n" << endl;
 }
 
 Board* createNewSimulation() {
@@ -63,7 +63,7 @@ void runSimulation(Board* board) {
     }
 }
 
-void runBlockFinderSimulation() {
+void runBlockOrBeehiveSimulation() {
     int width, height, alive_cells, maxSteps;
 
     cout << "Enter grid width: ";
@@ -75,7 +75,7 @@ void runBlockFinderSimulation() {
     cout << "Enter maximum steps per simulation: ";
     cin >> maxSteps;
 
-    runSimulationsUntilBlockFound(width, height, alive_cells, maxSteps);
+    runSimulationsBlockOrBeehive(width, height, alive_cells, maxSteps);
 }
 
 int main() {
@@ -100,7 +100,7 @@ int main() {
             delete board;
             break;
         case 3:
-            runBlockFinderSimulation();
+            runBlockOrBeehiveSimulation();
         case 4:
             return 0;
         }
