@@ -30,7 +30,7 @@
     <ClCompile Include="spaceship_pattern.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="ern.cpp">
+    <ClCompile Include="ern_calculator.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -47,7 +47,7 @@
     <ClInclude Include="spaceship_pattern.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="ern.h">
+    <ClInclude Include="ern_calculator.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

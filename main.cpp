@@ -5,13 +5,14 @@
 #include "still_life_pattern.h"
 #include "oscillator_pattern.h"
 #include "spaceship_pattern.h"
+#include "ern_calculator.h"
 
 using namespace std;
 // Using the standard namespace to avoid prefixing std:: everywhere
 
 void displayMenu() {
     cout << "Game of Life\n\n1. Create New Simulation\n2. Load Saved Simulation\n3. Experiment To Find Block or Beehive Pattern\n"
-        "4. Experiment To Find Blinker or Toad Pattern\n5. Experiment To Find Glider or LWSS\n6. Exit\n" << endl;
+        "4. Experiment To Find Blinker or Toad Pattern\n5. Experiment To Find Glider or LWSS\n6. Theoretical Minimum ERNs\n7. Exit\n" << endl;
 }
 // Function to display the main menu options
 
@@ -153,6 +154,9 @@ int main() {
             runSpaceshipSimulation();
             break;
         case 6:
+            displayTheoreticalERNs();
+            break;
+        case 7:
             return 0;
         }
     }

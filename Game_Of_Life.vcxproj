@@ -127,6 +127,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="ern_calculator.cpp" />
     <ClCompile Include="oscillator_pattern.cpp" />
     <ClCompile Include="spaceship_pattern.cpp" />
     <ClCompile Include="still_life_pattern.cpp" />
@@ -134,6 +135,7 @@
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="ern_calculator.h" />
     <ClInclude Include="oscillator_pattern.h" />
     <ClInclude Include="spaceship_pattern.h" />
     <ClInclude Include="still_life_pattern.h" />
